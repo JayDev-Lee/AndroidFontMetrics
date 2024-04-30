@@ -11,11 +11,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="net.studymongolian.fontmetrics.MainActivity">
 
+    <Spinner
+        android:id="@+id/spinnerSystemFont"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
 
     <net.studymongolian.fontmetrics.FontMetricsView
         android:id="@+id/viewWindow"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_below="@id/spinnerSystemFont"
         android:background="@android:color/white"
         android:padding="20dp"/>
 
@@ -88,7 +93,7 @@
                 android:text="Ascent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
 
-                android:theme="@style/Theme.AppCompat.CheckBoxAscent"/>
+                android:theme="@style/AppTheme.CheckBoxAscent"/>
 
             <TextView
                 android:id="@+id/tvAscent"
@@ -109,7 +114,7 @@
                 android:checked="true"
                 android:text="Baseline"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:theme="@style/Theme.AppCompat.CheckboxBaseline"/>
+                android:theme="@style/AppTheme.CheckboxBaseline"/>
 
             <TextView
                 android:id="@+id/tvBaseline"
@@ -131,7 +136,7 @@
                 android:checked="true"
                 android:text="Descent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:theme="@style/Theme.AppCompat.CheckboxDescent"/>
+                android:theme="@style/AppTheme.CheckboxDescent"/>
 
             <TextView
                 android:id="@+id/tvDescent"
@@ -146,7 +151,7 @@
 
             <CheckBox
                 android:id="@+id/cbBottom"
-                android:theme="@style/Theme.AppCompat.CheckboxBottom"
+                android:theme="@style/AppTheme.CheckboxBottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cbDescent"
@@ -167,7 +172,7 @@
 
             <CheckBox
                 android:id="@+id/cbWidth"
-                android:theme="@style/Theme.AppCompat.MeasuerdWidth"
+                android:theme="@style/AppTheme.MeasuerdWidth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cbBottom"
@@ -188,7 +193,7 @@
 
             <CheckBox
                 android:id="@+id/cbTextBounds"
-                android:theme="@style/Theme.AppCompat.TextBounds"
+                android:theme="@style/AppTheme.TextBounds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cbWidth"

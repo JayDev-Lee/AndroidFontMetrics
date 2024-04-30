@@ -1,283 +1,291 @@
-package net.studymongolian.fontmetrics;
+package net.studymongolian.fontmetrics
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.text.TextPaint;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.Toast;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
+import android.text.TextPaint
+import android.util.AttributeSet
+import android.view.View
+import java.time.format.TextStyle
 
-
-public class FontMetricsView extends View {
-
-    public final static int DEFAULT_FONT_SIZE_PX = 200;
-    //private static final int PURPLE = Color.parseColor("#9315db");
-    //private static final int ORANGE = Color.parseColor("#ff8a00");
-    private static final float STROKE_WIDTH = 5.0f;
-
-    private String mText;
-    private int mTextSize;
-    private Paint mAscentPaint;
-    private Paint mTopPaint;
-    private Paint mBaselinePaint;
-    private Paint mDescentPaint;
-    private Paint mBottomPaint;
-    private Paint mMeasuredWidthPaint;
-    private Paint mTextBoundsPaint;
-    private TextPaint mTextPaint;
-    private Paint mLinePaint;
-    private Paint mRectPaint;
-    private Rect mBounds;
-    private boolean mIsTopVisible;
-    private boolean mIsAscentVisible;
-    private boolean mIsBaselineVisible;
-    private boolean mIsDescentVisible;
-    private boolean mIsBottomVisible;
-    private boolean mIsBoundsVisible;
-    private boolean mIsWidthVisible;
+class FontMetricsView : View {
+    private var mText: String? = null
+    private var mTextSize = 0
+    private lateinit var mAscentPaint: Paint
+    private lateinit var mTopPaint: Paint
+    private lateinit var mBaselinePaint: Paint
+    private lateinit var mDescentPaint: Paint
+    private lateinit var mBottomPaint: Paint
+    private lateinit var mMeasuredWidthPaint: Paint
+    private lateinit var mTextBoundsPaint: Paint
+    private lateinit var mTextPaint: TextPaint
+    private lateinit var mLinePaint: Paint
+    private lateinit var mRectPaint: Paint
+    private lateinit var mBounds: Rect
+    private var mIsTopVisible = false
+    private var mIsAscentVisible = false
+    private var mIsBaselineVisible = false
+    private var mIsDescentVisible = false
+    private var mIsBottomVisible = false
+    private var mIsBoundsVisible = false
+    private var mIsWidthVisible = false
 
 
-    public FontMetricsView(Context context) {
-        super(context);
-        init();
+    constructor(context: Context?) : super(context) {
+        init()
     }
 
 
-    public FontMetricsView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init()
     }
 
-    private void init() {
-        mText = "My text line";
-        mTextSize = DEFAULT_FONT_SIZE_PX;
-        mTextPaint = new TextPaint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setTextSize(mTextSize);
-        mTextPaint.setColor(Color.BLACK);
+    private fun init() {
+        mText = "My text line"
+        mTextSize = DEFAULT_FONT_SIZE_PX
+        mTextPaint = TextPaint()
+        mTextPaint.isAntiAlias = true
+        mTextPaint.textSize = mTextSize.toFloat()
+        mTextPaint.color = Color.BLACK
 
-        mLinePaint = new Paint();
-        mLinePaint.setColor(Color.RED);
-        mLinePaint.setStrokeWidth(STROKE_WIDTH);
+        mLinePaint = Paint()
+        mLinePaint.color = Color.RED
+        mLinePaint.strokeWidth = STROKE_WIDTH
 
-        mAscentPaint = new Paint();
-        mAscentPaint.setColor(getResources().getColor(R.color.ascent));
-        mAscentPaint.setStrokeWidth(STROKE_WIDTH);
+        mAscentPaint = Paint()
+        mAscentPaint.color = resources.getColor(R.color.ascent)
+        mAscentPaint.strokeWidth = STROKE_WIDTH
 
-        mTopPaint = new Paint();
-        mTopPaint.setColor(getResources().getColor(R.color.top));
-        mTopPaint.setStrokeWidth(STROKE_WIDTH);
+        mTopPaint = Paint()
+        mTopPaint.color = resources.getColor(R.color.top)
+        mTopPaint.strokeWidth = STROKE_WIDTH
 
-        mBaselinePaint = new Paint();
-        mBaselinePaint.setColor(getResources().getColor(R.color.baseline));
-        mBaselinePaint.setStrokeWidth(STROKE_WIDTH);
+        mBaselinePaint = Paint()
+        mBaselinePaint.color = resources.getColor(R.color.baseline)
+        mBaselinePaint.strokeWidth = STROKE_WIDTH
 
-        mBottomPaint = new Paint();
-        mBottomPaint.setColor(getResources().getColor(R.color.bottom));
-        mBottomPaint.setStrokeWidth(STROKE_WIDTH);
+        mBottomPaint = Paint()
+        mBottomPaint.color = resources.getColor(R.color.bottom)
+        mBottomPaint.strokeWidth = STROKE_WIDTH
 
-        mDescentPaint = new Paint();
-        mDescentPaint.setColor(getResources().getColor(R.color.descent));
-        mDescentPaint.setStrokeWidth(STROKE_WIDTH);
+        mDescentPaint = Paint()
+        mDescentPaint.color = resources.getColor(R.color.descent)
+        mDescentPaint.strokeWidth = STROKE_WIDTH
 
-        mMeasuredWidthPaint = new Paint();
-        mMeasuredWidthPaint.setColor(getResources().getColor(R.color.measured_width));
-        mMeasuredWidthPaint.setStrokeWidth(STROKE_WIDTH);
+        mMeasuredWidthPaint = Paint()
+        mMeasuredWidthPaint.color = resources.getColor(R.color.measured_width)
+        mMeasuredWidthPaint.strokeWidth = STROKE_WIDTH
 
-        mTextBoundsPaint = new Paint();
-        mTextBoundsPaint.setColor(getResources().getColor(R.color.text_bounds));
-        mTextBoundsPaint.setStrokeWidth(STROKE_WIDTH);
-        mTextBoundsPaint.setStyle(Paint.Style.STROKE);
+        mTextBoundsPaint = Paint()
+        mTextBoundsPaint.color = resources.getColor(R.color.text_bounds)
+        mTextBoundsPaint.strokeWidth = STROKE_WIDTH
+        mTextBoundsPaint.style = Paint.Style.STROKE
 
-        mRectPaint = new Paint();
-        mRectPaint.setColor(Color.BLACK);
-        mRectPaint.setStrokeWidth(STROKE_WIDTH);
-        mRectPaint.setStyle(Paint.Style.STROKE);
+        mRectPaint = Paint()
+        mRectPaint.color = Color.BLACK
+        mRectPaint.strokeWidth = STROKE_WIDTH
+        mRectPaint.style = Paint.Style.STROKE
 
 
-        mBounds = new Rect();
+        mBounds = Rect()
 
-        mIsTopVisible = true;
-        mIsAscentVisible = true;
-        mIsBaselineVisible = true;
-        mIsDescentVisible = true;
-        mIsBottomVisible = true;
-        mIsBoundsVisible = true;
-        mIsWidthVisible = true;
+        mIsTopVisible = true
+        mIsAscentVisible = true
+        mIsBaselineVisible = true
+        mIsDescentVisible = true
+        mIsBottomVisible = true
+        mIsBoundsVisible = true
+        mIsWidthVisible = true
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
 
         // center the text baseline vertically
-        int verticalAdjustment = this.getHeight() / 2;
-        canvas.translate(0, verticalAdjustment);
+        val verticalAdjustment = this.height / 2
+        canvas.translate(0f, verticalAdjustment.toFloat())
 
-        float startX = getPaddingLeft();
-        float startY = 0;
-        float stopX = this.getMeasuredWidth();
-        float stopY = 0;
+        var startX = paddingLeft.toFloat()
+        var startY = 0f
+        var stopX = this.measuredWidth.toFloat()
+        var stopY: Float
 
         // draw text
-        canvas.drawText(mText, startX, startY, mTextPaint); // x=0, y=0
+        canvas.drawText(mText!!, startX, startY, mTextPaint) // x=0, y=0
 
         // draw lines
-        startX = 0;
+        startX = 0f
 
         if (mIsTopVisible) {
-            startY = mTextPaint.getFontMetrics().top;
-            stopY = startY;
-            canvas.drawLine(startX, startY, stopX, stopY, mTopPaint);
+            startY = mTextPaint.fontMetrics.top
+            stopY = startY
+            canvas.drawLine(startX, startY, stopX, stopY, mTopPaint)
         }
 
         if (mIsAscentVisible) {
-            startY = mTextPaint.getFontMetrics().ascent;
-            stopY = startY;
+            startY = mTextPaint.fontMetrics.ascent
+            stopY = startY
             //mLinePaint.setColor(Color.GREEN);
-            canvas.drawLine(startX, startY, stopX, stopY, mAscentPaint);
+            canvas.drawLine(startX, startY, stopX, stopY, mAscentPaint)
         }
 
         if (mIsBaselineVisible) {
-            startY = 0;
-            stopY = startY;
-            canvas.drawLine(startX, startY, stopX, stopY, mBaselinePaint);
+            startY = 0f
+            stopY = startY
+            canvas.drawLine(startX, startY, stopX, stopY, mBaselinePaint)
         }
 
         if (mIsDescentVisible) {
-            startY = mTextPaint.getFontMetrics().descent;
-            stopY = startY;
+            startY = mTextPaint.fontMetrics.descent
+            stopY = startY
             //mLinePaint.setColor(Color.BLUE);
-            canvas.drawLine(startX, startY, stopX, stopY, mDescentPaint);
+            canvas.drawLine(startX, startY, stopX, stopY, mDescentPaint)
         }
 
         if (mIsBottomVisible) {
-            startY = mTextPaint.getFontMetrics().bottom;
-            stopY = startY;
+            startY = mTextPaint.fontMetrics.bottom
+            stopY = startY
             // mLinePaint.setColor(ORANGE);
-            mLinePaint.setColor(Color.RED);
-            canvas.drawLine(startX, startY, stopX, stopY, mBaselinePaint);
+            mLinePaint.color = Color.RED
+            canvas.drawLine(startX, startY, stopX, stopY, mBaselinePaint)
         }
 
         if (mIsBoundsVisible) {
-
-            mTextPaint.getTextBounds(mText, 0, mText.length(), mBounds);
-            float dx = getPaddingLeft();
-            canvas.drawRect(mBounds.left + dx, mBounds.top, mBounds.right + dx, mBounds.bottom, mTextBoundsPaint);
+            mTextPaint.getTextBounds(mText, 0, mText!!.length, mBounds)
+            val dx = paddingLeft.toFloat()
+            canvas.drawRect(
+                mBounds.left + dx,
+                mBounds.top.toFloat(),
+                mBounds.right + dx,
+                mBounds.bottom.toFloat(),
+                mTextBoundsPaint
+            )
         }
 
         if (mIsWidthVisible) {
-
-
             // get measured width
-            float width = mTextPaint.measureText(mText);
+
+
+            val width = mTextPaint.measureText(mText)
 
             // get bounding width so that we can compare them
-            mTextPaint.getTextBounds(mText, 0, mText.length(), mBounds);
+            mTextPaint.getTextBounds(mText, 0, mText!!.length, mBounds)
 
             // draw vertical line just before the left bounds
-            startX = getPaddingLeft() + mBounds.left - (width - mBounds.width()) / 2;
-            stopX = startX;
-            startY = -verticalAdjustment;
-            stopY = startY + this.getHeight();
-            canvas.drawLine(startX, startY, stopX, stopY, mMeasuredWidthPaint);
+            startX = paddingLeft + mBounds.left - (width - mBounds.width()) / 2
+            stopX = startX
+            startY = -verticalAdjustment.toFloat()
+            stopY = startY + this.height
+            canvas.drawLine(startX, startY, stopX, stopY, mMeasuredWidthPaint)
 
             // draw vertical line just after the right bounds
-            startX = startX + width;
-            stopX = startX;
-            canvas.drawLine(startX, startY, stopX, stopY, mMeasuredWidthPaint);
+            startX += width
+            stopX = startX
+            canvas.drawLine(startX, startY, stopX, stopY, mMeasuredWidthPaint)
         }
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        var width = 200
+        var height = 200
 
-        int width = 200;
-        int height = 200;
-
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthRequirement = MeasureSpec.getSize(widthMeasureSpec);
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthRequirement = MeasureSpec.getSize(widthMeasureSpec)
         if (widthMode == MeasureSpec.EXACTLY) {
-            width = widthRequirement;
+            width = widthRequirement
         } else if (widthMode == MeasureSpec.AT_MOST && width > widthRequirement) {
-            width = widthRequirement;
+            width = widthRequirement
         }
 
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightRequirement = MeasureSpec.getSize(heightMeasureSpec);
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightRequirement = MeasureSpec.getSize(heightMeasureSpec)
         if (heightMode == MeasureSpec.EXACTLY) {
-            height = heightRequirement;
+            height = heightRequirement
         } else if (heightMode == MeasureSpec.AT_MOST && width > heightRequirement) {
-            height = heightRequirement;
+            height = heightRequirement
         }
 
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(width, height)
     }
 
-    // getters
-    public Paint.FontMetrics getFontMetrics() {
-        return mTextPaint.getFontMetrics();
-    }
+    val fontMetrics: Paint.FontMetrics
+        // getters
+        get() = mTextPaint.fontMetrics
 
-    public Rect getTextBounds() {
-        mTextPaint.getTextBounds(mText, 0, mText.length(), mBounds);
-        return mBounds;
-    }
+    val textBounds: Rect
+        get() {
+            mTextPaint.getTextBounds(mText, 0, mText!!.length, mBounds)
+            return mBounds
+        }
 
-    public float getMeasuredTextWidth() {
-        return mTextPaint.measureText(mText);
-    }
+    val measuredTextWidth: Float
+        get() = mTextPaint.measureText(mText)
+
+    val typeface: Typeface
+        get() = mTextPaint.typeface
 
     // setters
-    public void setText(String text) {
-        mText = text;
-        invalidate();
-        requestLayout();
+    fun setText(text: String?) {
+        mText = text
+        invalidate()
+        requestLayout()
     }
 
-    public void setTextSizeInPixels(int pixels) {
-        mTextSize = pixels;
-        mTextPaint.setTextSize(mTextSize);
-        invalidate();
-        requestLayout();
+    fun setTextSizeInPixels(pixels: Int) {
+        mTextSize = pixels
+        mTextPaint.textSize = mTextSize.toFloat()
+        invalidate()
+        requestLayout()
     }
 
-    public void setTopVisible(boolean isVisible) {
-        mIsTopVisible = isVisible;
-        invalidate();
+    fun setTopVisible(isVisible: Boolean) {
+        mIsTopVisible = isVisible
+        invalidate()
     }
 
-    public void setAscentVisible(boolean isVisible) {
-        mIsAscentVisible = isVisible;
-        invalidate();
+    fun setAscentVisible(isVisible: Boolean) {
+        mIsAscentVisible = isVisible
+        invalidate()
     }
 
-    public void setBaselineVisible(boolean isVisible) {
-        mIsBaselineVisible = isVisible;
-        invalidate();
+    fun setBaselineVisible(isVisible: Boolean) {
+        mIsBaselineVisible = isVisible
+        invalidate()
     }
 
-    public void setDescentVisible(boolean isVisible) {
-        mIsDescentVisible = isVisible;
-        invalidate();
+    fun setDescentVisible(isVisible: Boolean) {
+        mIsDescentVisible = isVisible
+        invalidate()
     }
 
-    public void setBottomVisible(boolean isVisible) {
-        mIsBottomVisible = isVisible;
-        invalidate();
+    fun setBottomVisible(isVisible: Boolean) {
+        mIsBottomVisible = isVisible
+        invalidate()
     }
 
-    public void setBoundsVisible(boolean isVisible) {
-        mIsBoundsVisible = isVisible;
-        invalidate();
+    fun setBoundsVisible(isVisible: Boolean) {
+        mIsBoundsVisible = isVisible
+        invalidate()
     }
 
-    public void setWidthVisible(boolean isVisible) {
-        mIsWidthVisible = isVisible;
-        invalidate();
+    fun setWidthVisible(isVisible: Boolean) {
+        mIsWidthVisible = isVisible
+        invalidate()
     }
 
+    fun setTypeface(typeface: Typeface) {
+        mTextPaint.typeface = typeface
+        invalidate()
+    }
+
+    companion object {
+        const val DEFAULT_FONT_SIZE_PX: Int = 100
+
+        //private static final int PURPLE = Color.parseColor("#9315db");
+        //private static final int ORANGE = Color.parseColor("#ff8a00");
+        private const val STROKE_WIDTH = 5.0f
+    }
 }
